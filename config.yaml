@@ -1,0 +1,14 @@
+# !!! contains sensitive data, do not expose !!!
+
+server_port: 8080
+
+# db related
+db_uri: mongodb://localhost:27017 # default port
+db_name: auth
+db_token_collection: refresh_tokens
+
+# token related
+access_token_key: accesstokensigningkey
+refresh_token_key: refreshtokensigningkey
+access_token_exp_seconds: 150
+refresh_token_exp_seconds: 3600
