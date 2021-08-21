@@ -73,8 +73,15 @@ func (token *AccessToken) VerifyAndGetClaims() (*Claims, error) {
 	return claims, err
 }
 
+// this function does not validate!
 func (token *AccessToken) getUserUUID() (uuid.UUID, error) {
 	claims, err := token.VerifyAndGetClaims()
+
+	// ignore expiration error bc this function does not validate
+	if e, ok := err.(*jwt.ValidationError); ok && (e.Errors == jwt.ValidationErrorExpired) {
+		err = nil
+	}
+
 	return claims.UserUUID, err
 }
 

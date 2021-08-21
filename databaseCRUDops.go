@@ -76,19 +76,15 @@ func updateDatabaseRecord(userUUID uuid.UUID, hashedToken []byte) (updated bool,
 	return
 }
 
-/*
-func deleteDatabaseRecord(userUUID uuid.UUID) error {
+// returns true if deleted
+func deleteDatabaseRecord(userUUID uuid.UUID) (bool, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 	defer cancel()
 
 	tokenCollection := getTokenCollection()
 	result, err := tokenCollection.DeleteOne(ctx, bson.M{"_id": userUUID})
 	if err != nil {
-		return err
+		return result.DeletedCount == 1, err
 	}
-	if result.DeletedCount == 0 {
-		return errors.New("no document for user ID " + userUUID.String())
-	}
-	return nil
+	return result.DeletedCount == 1, nil
 }
-*/

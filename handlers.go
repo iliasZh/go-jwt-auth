@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func homePage(w http.ResponseWriter, r *http.Request) {
@@ -33,14 +34,31 @@ func refreshTokens(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err = tokenPair.Refreshable(); err != nil {
-		handleError("invalid token pair", err, http.StatusUnauthorized, w)
-		return
-	}
-
 	userUUID, err := tokenPair.AccessToken.getUserUUID()
 	if err != nil {
 		handleError("invalid access token", err, http.StatusUnauthorized, w)
+		return
+	}
+
+	err = tokenPair.Refreshable()
+
+	// !!! someone's trying to use the old refresh token
+	// could be legitimate user, could be a malicious one
+	//
+	// if it's the legitimate user, that means someone malicious
+	// already used the old refresh token and got a new one!
+	//
+	// to prevent malicious user from refreshing again, simply delete the record
+	if err == bcrypt.ErrMismatchedHashAndPassword {
+		_, err := deleteDatabaseRecord(userUUID)
+		if err != nil {
+			handleError("error while deleting db record", err, 0, w)
+			return
+		}
+	}
+
+	if err != nil {
+		handleError("invalid token pair", err, http.StatusUnauthorized, w)
 		return
 	}
 
