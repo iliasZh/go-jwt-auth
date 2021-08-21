@@ -25,27 +25,6 @@ func getTokens(w http.ResponseWriter, r *http.Request) {
 	issueTokenPair(w, userUUID)
 }
 
-func issueTokenPair(w http.ResponseWriter, userUUID uuid.UUID) {
-	tokenPair, err := generateTokenPair(userUUID)
-	if err != nil {
-		handleError("failed to generate token pair", err, 0, w)
-		return
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	err = json.NewEncoder(w).Encode(tokenPair)
-	if err != nil {
-		handleError("failed to encode the token pair to JSON", err, 0, w)
-		return
-	}
-
-	err = registerRefreshTokenInDatabase(userUUID, tokenPair.RefreshToken)
-	if err != nil {
-		handleError("failed to put the refresh token to the database", err, 0, w)
-		return
-	}
-}
-
 //	/refresh-tokens
 func refreshTokens(w http.ResponseWriter, r *http.Request) {
 	tokenPair, err := readTokenPairFromRequest(r)
@@ -66,6 +45,27 @@ func refreshTokens(w http.ResponseWriter, r *http.Request) {
 	}
 
 	issueTokenPair(w, userUUID)
+}
+
+func issueTokenPair(w http.ResponseWriter, userUUID uuid.UUID) {
+	tokenPair, err := generateTokenPair(userUUID)
+	if err != nil {
+		handleError("failed to generate token pair", err, 0, w)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(tokenPair)
+	if err != nil {
+		handleError("failed to encode the token pair to JSON", err, 0, w)
+		return
+	}
+
+	err = registerRefreshTokenInDatabase(userUUID, tokenPair.RefreshToken)
+	if err != nil {
+		handleError("failed to put the refresh token to the database", err, 0, w)
+		return
+	}
 }
 
 func readTokenPairFromRequest(r *http.Request) (TokenPair, error) {
