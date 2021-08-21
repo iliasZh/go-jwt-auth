@@ -10,15 +10,14 @@ Host: localhost:8080
 ###
 
 # sample refresh request
-# substitute the tokens you got from previous request
+# substitute the tokens you got from the get-tokens request to refresh
 POST /refresh-tokens HTTP/1.1
 Host: localhost:8080
 Content-Type: application/json
 
 {
-	"access_token":"eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX3V1aWQiOiIzYTY0MTQ3Yi1mZGFjLTRlOGItOTg2OS0wZmJiN2M0YzczN2IiLCJleHAiOjE2Mjk1NjIxMjl9.G4E8OkGVydYwi-a-HOoOdgLfh2hLyiXiacMU-C-cA-H6R3zzxDHbWPzEMxEYxQxLFCfERE4fGP450k0oIy_cQQ",
-	"refresh_token":"U2F0IEF1ZyAyMSAyMjowNjoxOSArMDUgMjAyMS5KidM4eb9xzVmVxA3EzzzMWansiGAkg1YSE_fBuwjrhEPbpkuJ2HLR2Lu1twDyW_JowRIKjskt1LiJu0KQ-kLS"
+	"access_token": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX3V1aWQiOiIzYTY0MTQ3Yi1mZGFjLTRlOGItOTg2OS0wZmJiN2M0YzczN2IiLCJleHAiOjE2Mjk1NjQ2Mzl9.Wtb1Q9vpHWjA9kgpZ27FCpv6oLplIr6WXP0sDpOUproqc3GQnD9tJ6uyc-05qzXUQx1f-uQDqmLp6MC6ThWrNg",
+	"refresh_token":"U2F0IEF1ZyAyMSAyMjo0ODowOSArMDUgMjAyMS6d6GbF1yONnF8-cPQzTKbhg0q0ZYRLGxFwJIELb53dLEXG0XMDNaJyR_g4ReOeNGttOFr8sgqJBFvIRBO6ozcy"
 }
-
 
 ###
