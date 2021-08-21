@@ -36,25 +36,26 @@ func refreshTokens(w http.ResponseWriter, r *http.Request) {
 
 	userUUID, err := tokenPair.AccessToken.getUserUUID()
 	if err != nil {
-		handleError("invalid access token", err, http.StatusUnauthorized, w)
+		handleError("failed to get user UUID", err, http.StatusUnauthorized, w)
 		return
 	}
 
 	err = tokenPair.Refreshable()
-
-	// !!! someone's trying to use the old refresh token
+	// !!! someone's trying to reuse a token pair
 	// could be legitimate user, could be a malicious one
 	//
 	// if it's the legitimate user, that means someone malicious
-	// already used the old refresh token and got a new one!
+	// already used the old refresh token and got a new pair!
 	//
 	// to prevent malicious user from refreshing again, simply delete the record
 	if err == bcrypt.ErrMismatchedHashAndPassword {
-		_, err := deleteDatabaseRecord(userUUID)
-		if err != nil {
-			handleError("error while deleting db record", err, 0, w)
+		_, dberr := deleteDatabaseRecord(userUUID)
+		if dberr != nil {
+			handleError("error while deleting db record", dberr, 0, w)
 			return
 		}
+		handleError("token pair reuse", err, http.StatusUnauthorized, w)
+		return
 	}
 
 	if err != nil {
