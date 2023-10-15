@@ -2,6 +2,8 @@
 
 This repo is a part of a RESTful authorization service written in Go with MongoDB as the database.
 
+It is my first Go project, so that's why the code is pretty bad :)
+
 There are two routes:
 
 /get-tokens?user-uuid=<user-uuid> - issues a pair: one access token and one refresh token and then loads the hash of the refresh token to the databse.
