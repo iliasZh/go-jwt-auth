@@ -2,7 +2,7 @@
 
 This repo is a part of a RESTful authorization service written in Go with MongoDB as the database.
 
-It is my first Go project, so that's why the code is pretty bad :)
+It is my first Go project. And also I did not have any enterprise experience at the time of writing. That's why the code is pretty bad :)
 
 There are two routes:
 
